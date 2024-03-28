@@ -1,52 +1,24 @@
+#### George Perry
+#### 3/27/2024
+
 # Sedaro Nano
-
-The tiniest possible mockup of our system
-
-## Goal
-
-The goal of this mini-project is to gain a better understanding of your ability to **be creative**, **think through problems**, and **solve relevant challenges** related to the engineering roles at Sedaro. This is an opportunity for you to show off your personal strengths. Don't focus on the simple contributions and instead aim to really impress us. To best set expectations, we won't be impressed by an ability to write boilerplate or copy and paste tutorials.  A submission that makes us say "Wow, that's SMART!" is far better than one that makes us say "This is really robust.". Get creative, the prompt is intentionally very open-ended.
-
-Within the next `7` days, attempt the following mini-project and return your solution containing the full project (less anything that would be .gitignored such as `node_modules`) and any notes on how to setup and run your specific solution. As important as your solution, we are interested in understanding your thought process and your ability to clearly communicate your approach so a writeup should also be included. For the writeup, include some details on your solution, any novel or creative aspects of the solution, and what additional features or improvements you would add if you were given more time.
-
-Please note that if you end up getting to a solution that you aren't happy with or that is a dead end, document why and we will call that good enough. Please don't invest too much time. A writeup of why a solution is insufficient and how you might approach it differently often tells us what we need to know.
-
-If you have any questions or issues while you work through this problem or if you get stuck, please contact Bas Welsh at sebastian.welsh@sedarotech.com.
-
-Once you have completed your solution, please email to kacie.neurohr@sedarotech.com and sebastian.welsh@sedarotech.com
-
 ## Setup
 
 1. Clone this repository.
-   - Please note that **only** cloning via HTTPS is supported
-   - Please **do not** commit changes to any branch of this repository. If you would like to use git, you may fork this repository to create a private repo of your own
 2. To compile and run the app, execute the following command
    - ```docker compose up app```
-4. That's it ✅! Sedaro Nano should now be available via web browser at http://localhost:3000/. It may take a few moments for the container to fully come up and serve the page. Changes to the react app should auto reload the webpage.
+3. View the page on a web browser at http://localhost:3000/
 
-## Your Task
+## Write-up
 
-**Review the few files that make up Sedaro Nano, figure out how it works, and then add to it in whatever way <u>best</u> shows off your unique skills + creativity!**
+My main focus throughout this process was to improve the experience on the frontend. I wanted to create functionality to play the simulation from start to finish to give users the ability to easily navigate through the entire simulation and pause the sequence at any point. I thought this would be useful because an animation can break down complex concepts or patterns in a simulation and process them into more digestible pieces. Dynamic content like this is also more likely to be more engaging and interactive, especially when it comes to data visualization.
 
-### Some Project Ideas
+To accomplish this, I first added state management properties related to the simulation’s progress – the “currentIndex” and “maxIndex” properties are used to keep track of the current frame being displayed by the plot, and the final possible frame. The “isPlaying” property determines if a simulation is already running. Additionally, the usage of “timerId” and intervals are used to manage the intervals responsible for progressing the animation, so the playback control is accurate from start to finish. The “play()” function handles most of this described logic, and there are also functions and corresponding buttons to pause, reset, and skip to the end of the animated simulation. The only other extra functions and properties I declared are used to streamline the creation of these additional custom buttons and their icons.
 
-- Simulator:
-  - Improve the Q-Range KV Store data structure
-  - Make the system more generic/extensible
-  - Make it fast
-- Front End:
-  - Add cool visualizations and interactivity
-  - Improve efficiency/caching
-- Data:
-  - Utilize a better persistence layer than a js file
-  - Do some statistical analysis on the data
-  - Set up background jobs to preprocess data
-- Modeling & Simulation:
-  - Improve the numerical stability of the simulation functions
-  - Implement additional modeling and simulation scope
-  - Analyze the sensitivity to initial conditions
-- Etc:
-  - Port to a language of your choice
-  - Set up testing
-- Whatever you want; these are just suggestions to get you thinking
+One of the challenges I faced throughout this implementation was to integrate my ideas into the pre-existing Plotly component logic. Adding custom buttons to the Modebar wasn’t too tricky; the plotly.com documentation gave me more than enough information to implement the UI changes. I did run into some issues with the built-in zoom/autoscale/hide trace features while the actual animation was running – there didn’t seem to be a way to allow a user to zoom into the plot or hide one of the traces while simultaneously changing the data displayed on the axes. So, I figured it would be best to keep the plot in a fixed position and hide zooming functionality unless the animation was paused or complete.
 
-![](./screenshot.png)
+If I had more time outside of schoolwork/extracurriculars to further enhance the frontend experience, I would have added a slider that controls the exact frame a user wishes to see. This would give the user even more freedom to explore the simulation, as it can be tricky to click the pause button on the exact frame one wishes to see. Scalability was also another concern that I would want to address. As the data set becomes more complex, it’s crucial to implement some sort of data caching to reduce the load on the server and decrease the longer times it would take the user to load content. I would look towards a type of client-side caching to speed up repeated data accesses, such as if a user chooses to continuously navigate between the same few frames.
+
+The changes I made to the Python file weren’t nearly as involved, but I would argue that they still make a difference. The first thing I did was move some of the logic from the propagate function into a new function that calculates the gravitational effect on velocity, and I felt as this improved readability and made it a bit less complex. It also added necessary logic to prevent a division by 0. The only other change I made was in the simulation loop at the end of the file – I changed the set comparison to an all() function to avoid temporary data structure creation. The previous implementation would have created 2 sets from the keys of “universe” and “init” before comparing them, unnecessarily increasing the computational overhead. The all() function, on the other hand, prevents this, and uses short-circuit evaluation which will stop the loop as soon as it encounters a False condition.
+
+One possible additional area of improvement in this file would be the “QRangeStore” data structure. The current implementation uses a list to store range-value pairs, which has a linear time complexity for insertion and lookups. To improve this, I could rework the class and the file’s logic to make use of a tree-type structure, such as a Binary Search Tree. This data structure would store each interval on a node, and it would be ordered by the starting point of each interval. This type of structure would allow for better performance, as its operations would have a logarithmic time complexity. 
