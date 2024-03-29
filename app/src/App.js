@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PlotComponent from './Components/Plot/PlotComponent';
 import ControlPanel from './Components/ControlPanel/ControlPanel';
-import './App.css';
+import './CSS/App.css';
 
 const App = () => {
   const [plotData, setPlotData] = useState([]);
@@ -9,6 +9,7 @@ const App = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [maxIndex, setMaxIndex] = useState(0);
   const [timerId, setTimerId] = useState(null);
+  const [showVelocities, setShowVelocities] = useState({ planet: false, satellite: false });
 
   useEffect(() => {
     // fetch plot data when the component mounts
@@ -20,17 +21,18 @@ const App = () => {
         const updatedPlotData = {};
 
         data.forEach(([t0, t1, frame]) => {
-          for (let [agentId, { x, y }] of Object.entries(frame)) {
-            updatedPlotData[agentId] = updatedPlotData[agentId] || { x: [], y: [] };
+          for (let [agentId, { x, y, time }] of Object.entries(frame)) {
+            updatedPlotData[agentId] = updatedPlotData[agentId] || { x: [], y: [], time: [] };
             updatedPlotData[agentId].x.push(x);
             updatedPlotData[agentId].y.push(y);
+            updatedPlotData[agentId].time.push(time);
           }
         });
 
         setPlotData(Object.values(updatedPlotData));
         console.log('plotData:', Object.values(updatedPlotData));
-        // Set the max index to the length of the data
-        setMaxIndex(data.length - 1);
+        // Set the max index to the length of the longer object
+        setMaxIndex(Math.max(Object.values(updatedPlotData)[0]['x'].length, Object.values(updatedPlotData)[1]['x'].length));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -102,6 +104,10 @@ const App = () => {
       />
       <ControlPanel
         currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
+        maxIndex={maxIndex}
+        showVelocities={showVelocities}
+        setShowVelocities={setShowVelocities}
       />
     </div>
   );
