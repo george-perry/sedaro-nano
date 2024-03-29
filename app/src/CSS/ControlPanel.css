@@ -1,4 +1,4 @@
-.slider-container {
+.control-panel-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -6,6 +6,23 @@
     align-items: center;
 }
 
+.slider-container {
+    flex-direction: row;
+}
+
 .slider {
     width: 50vw;
+}
+
+.button {
+    width: 30px;
+    height: 30px;
+}
+
+.increment {
+    margin-right: 25px;
+}
+
+.decrement {
+    margin-left: 10px;
 }
