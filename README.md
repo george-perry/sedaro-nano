@@ -32,4 +32,23 @@ If I had more time outside of schoolwork/extracurriculars to further enhance the
 
 One possible additional area of improvement in the simulation file would be the “QRangeStore” data structure. The current implementation uses a list to store range-value pairs, which has a linear time complexity for insertion and lookups. To improve this, I could rework the class and the file’s logic to make use of a tree-type structure, such as a Binary Search Tree. This data structure would store each interval on a node, and it would be ordered by the starting point of each interval. This type of structure would allow for better performance, as its operations would have a logarithmic time complexity. 
 
-TALK ABOUT TIME DISCREPANCIES HERE - MENTION INTERPOLATION POSSIBILITY... ephemeris error??
+### Additional thoughts on the simulation fluctuations
+
+Throughout the process of improving visualizations, I encountered a discrepancy. The data fed into Plotly describes each object's position in separate arrays, with each array element storing an object that includes an x/y coordinate. In theory, an animation should show both objects' respective x/y positions at the same time. The challenge arises because the timestamps for both objects do not perfectly align. For example, the fifth element (currentIndex = 4) of each array represents slightly different moments in time. These fluctuations in time steps made it hard to provide a completely accurate animation visualization. 
+
+I did some research on discrepancies in simulation data and found something called ephemeris errors, which I concluded was what the randomness in time steps seemed to be representing. I found that interpolating the positions of both entities to align their times would be the best solution to this issue, even if the exact times are not present in the original data. My research resulted in the following process:
+
+- First, choose a target time ($t$) to represent a specific frame
+- Then, identify 2 data points in each array that we want to use to represent that single frame
+- Calculate the precise position at the desired time point by interpolating these points, as shown by the following formula 
+   - $x = x_0 + {(x_1 - x_0)\over(t - t_0)} * (t_1 - t_0)$
+   - $y = y_0 + {(y_1 - y_0)\over(t - t_0)} * (t_1 - t_0)$
+   - Where $x_0$ is the initial x-coordinate, $(x_1 - x_0) \over(t - t_0)$ represents the rate of change between 2 points, and $(t_1 - t_0)$ calculates how far our target time $t$ is away from $t_0$ (same goes for the $y$ calculation)
+- Repeat this process for each object, and for however many frames we wish to represent
+ 
+To help explain this further... GIVE EXAMPLE
+ 
+By doing this, we are estimating a value between 2 known values, assuming that the change between these values is linear... that in itself is a difficult assumption because the movement of planets and satellites is not linear, so this "solution" would only work for the Sedaro Nano mini-project, and I thought it might even be a bit out-of-scope. I learned a lot exploring this idea, and it's definitely an interesting topic I'd like to come back to if I had more time. 
+
+
+
