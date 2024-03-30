@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
+import '../../CSS/PlotComponent.css';
 
 const PlotComponent = ({
   plotData,
@@ -90,9 +91,9 @@ const PlotComponent = ({
   const { minX, maxX, minY, maxY } = calculateMinMaxValues(plotData);
 
   return (
-    <div>
+    <div className="plot-container">
       <Plot
-        style={{ width: '100%', height: '90vh', left: 0, top: 0 }}
+        style={{ width: '100%', height: '85vh', left: 0, top: 0 }}
         data={displayData}
         layout={{
           title: 'Visualization',

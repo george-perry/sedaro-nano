@@ -1,17 +1,34 @@
-.control-panel-container {
+.control-panel-container  {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.plot-data {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    min-width: 300px;
+}
+
+.plot-data-label {
+    font-weight: bold;
+}
+
+.slider-header-button-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
     align-items: center;
 }
 
-.slider-container {
+.slider-button-container {
     flex-direction: row;
 }
 
 .slider {
-    width: 50vw;
+    width: 40vw;
 }
 
 .button {

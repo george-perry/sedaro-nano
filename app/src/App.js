@@ -21,11 +21,13 @@ const App = () => {
         const updatedPlotData = {};
 
         data.forEach(([t0, t1, frame]) => {
-          for (let [agentId, { x, y, time }] of Object.entries(frame)) {
-            updatedPlotData[agentId] = updatedPlotData[agentId] || { x: [], y: [], time: [] };
+          for (let [agentId, { x, y, vx, vy, time }] of Object.entries(frame)) {
+            updatedPlotData[agentId] = updatedPlotData[agentId] || { x: [], y: [], vx: [], vy: [], time: [] };
             updatedPlotData[agentId].x.push(x);
             updatedPlotData[agentId].y.push(y);
             updatedPlotData[agentId].time.push(time);
+            updatedPlotData[agentId].vx.push(vx);
+            updatedPlotData[agentId].vy.push(vy);
           }
         });
 
@@ -104,6 +106,21 @@ const App = () => {
       />
       <ControlPanel
         currentIndex={currentIndex}
+        currentVx={
+          plotData[1] && plotData[1].vx && currentIndex >= 0 && currentIndex < plotData[1].vx.length
+            ? plotData[1].vx[currentIndex]
+            : 'N/A'
+        }
+        currentVy={
+          plotData[1] && plotData[1].vy && currentIndex >= 0 && currentIndex < plotData[1].vy.length
+            ? plotData[1].vy[currentIndex]
+            : 'N/A'
+        }
+        currentTime={
+          plotData[1] && plotData[1].time && currentIndex >= 0 && currentIndex < plotData[1].time.length
+            ? plotData[1].time[currentIndex]
+            : 'N/A'
+        }
         setCurrentIndex={setCurrentIndex}
         maxIndex={maxIndex}
         showVelocities={showVelocities}
